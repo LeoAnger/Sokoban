@@ -22,10 +22,12 @@ public class MapCreater : MonoBehaviour
 
     public Dictionary<int, GameObject> pos_targetBox = new Dictionary<int, GameObject>();   // 目标盒子
     public Dictionary<int, GameObject> pos_box = new Dictionary<int, GameObject>();         // 盒子
-    public Dictionary<int, GameObject> pos_target = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> pos_target = new Dictionary<int, GameObject>();      // creat()关卡时，需要初始化此变量：2020年7月28日
     public Dictionary<string, int> layerMaps = new Dictionary<string, int>();
     public HashSet<int> walls = new HashSet<int>();
     public List<int> targets = new List<int>();
+    
+    public List<int[,]> MapList = new List<int[,]>();
 
     void Awake()
     {
@@ -60,7 +62,43 @@ public class MapCreater : MonoBehaviour
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
             };
+        MapList.Add(mapsArr);
+        MapList.Add(
+            new int[20, 20] {
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                { 1, 0, 3, 0, 2, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+             }
+        );
+    }
 
+    public void creat()
+    {
+        // 判断当前关卡是否胜利
+        if (!NextLevel.nowLevelBool)
+        { return; }
+        // 下一关
+        NextLevel.nowLevel++;
+        // 1.获取地图
+        int[,] mapByNum = MyUtil.getMapByNum(MapList, NextLevel.nowLevel);
+        // 2.创建地图
         //"逐层"生成地图 先创建的在下面原则，即由低到高原则。
         //Ground --> Wall --> target --> box --> box&target --> ... --> player
         // 生成Ground
@@ -81,6 +119,10 @@ public class MapCreater : MonoBehaviour
 
         /// 初始化盒子总数
         boxNums = FindObjectsOfType<Box>().Length - 1;
+        
+        // 更新胜利变量
+        NextLevel.nowLevelBool = false;
+        print("当前地图：" + NextLevel.nowLevel);
     }
 
     private void initTarget(int num)
@@ -120,8 +162,8 @@ public class MapCreater : MonoBehaviour
         }
 
         //打印walls
-        Debug.Log("targetBox集合length：");
-        Debug.Log(pos_targetBox.Count);
+        // Debug.Log("targetBox集合length：");
+        // Debug.Log(pos_targetBox.Count);
     }
 
     private void initBox(int num)
@@ -162,8 +204,8 @@ public class MapCreater : MonoBehaviour
             {
                 str = str + i + ",";
             }
-            Debug.Log("walls集合：");
-            Debug.Log(str);
+            // Debug.Log("walls集合：");
+            // Debug.Log(str);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -113,5 +114,15 @@ public class MyUtil
         // 7.字体对齐方式
 
         return gameObject;
+    }
+    
+    // 获取关卡By地图序号
+    /*
+    * @author:Anger
+    * @Date:    2020年7月20日07点21分
+    */
+    public static T getMapByNum<T>(List<T> list, int num)
+    {
+        return list[num];
     }
 }

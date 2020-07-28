@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Box : MonoBehaviour
 {
-
-    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,13 +14,5 @@ public class Box : MonoBehaviour
     void Update()
     {
         
-    }
-
-    // 测试
-    public void btnFunc()
-    {
-        // animator.SetBool("targetInBox", !animator.GetBool("targetInBox"));
-        Win win = FindObjectOfType<Win>();
-        win.transform.position = new Vector3(8, -5);
     }
 }

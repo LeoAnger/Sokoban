@@ -7,19 +7,27 @@ public class MyPlayer : MonoBehaviour
 
     MapCreater M;
     Exit exit ;
+    public GameObject NextBtn;
     int boxCompleted = 0;
-    bool gameOver = false;  // 游戏是否结束
-
+    //bool gameOver = false;  // 游戏是否结束
     void Awake()
     {
         M = FindObjectOfType<MapCreater>();
         exit = FindObjectOfType<Exit>();
         exit.gameObject.SetActive(false);
     }
-
+    // Start is called before the first frame update
+    void Start()
+    {
+        M.creat();
+    }
     // Update is called once per frame
     void Update()
     {
+        if (NextLevel.nowLevelBool)
+        {
+            return;
+        }
         int dx = 0;
         int dy = 0;
         if(Input.GetKeyDown(KeyCode.RightArrow))
@@ -93,21 +101,30 @@ public class MyPlayer : MonoBehaviour
         }
 
         transform.position = new Vector3(nx,ny);
-        if(gameOver)
+        if(NextLevel.nowLevelBool)
         {
             return;
         }
+        // 判断玩家是否通关
         if(isWin())
+        {
+            // 更新胜利变量
+            NextLevel.nowLevelBool = true;
+        }
+        
+        // 胜利画面及下一个按钮
+        if (NextLevel.nowLevelBool && NextLevel.nowLevel >= 0)
         {
             Debug.Log("游戏胜利");
             // 显示胜利画面
             Win win = FindObjectOfType<Win>();
             win.transform.position = new Vector3(8, -5);
-            // 更新胜利变量
-            gameOver = true;
             // 显示退出程序按钮
             //exit.transform.position = new Vector3(0, 0);
-            exit.gameObject.SetActive(true);
+            //exit.gameObject.SetActive(true);
+            NextBtn.SetActive(true);
+            // 修改游戏胜利变量
+            NextLevel.nowLevelBool = true;
         }
 
     }
@@ -141,5 +158,18 @@ public class MyPlayer : MonoBehaviour
     {
         if (boxCompleted >= M.boxNums) return true;
         return false;
+    }
+
+    // 下一关
+    /**
+     * 日期：2020年7月28日23点43分
+     * 问题：
+     *     1.需要清空上一关生成的Game Object
+     *     2.生成的GameObject保存到List<GameObject> nowLevelGameObjectList;
+     *     3.根据二维数组生成地图
+     */
+    public void creat()
+    {
+        M.creat();
     }
 }
