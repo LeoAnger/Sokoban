@@ -16,7 +16,6 @@ public class MapCreater : MonoBehaviour
     public GameObject target;
     public GameObject targetInBox;
     public GameObject ground;
-    public GameObject player;
     public GameObject box;
 
 
@@ -25,9 +24,9 @@ public class MapCreater : MonoBehaviour
     public Dictionary<int, GameObject> pos_target = new Dictionary<int, GameObject>();      // creat()关卡时，需要初始化此变量：2020年7月28日
     public Dictionary<string, int> layerMaps = new Dictionary<string, int>();
     public HashSet<int> walls = new HashSet<int>();
-    public List<int> targets = new List<int>();
-    
+
     public List<int[,]> MapList = new List<int[,]>();
+    public static List<GameObject> GameObjectList = new List<GameObject>();    // 地图物体集合
 
     void Awake()
     {
@@ -110,9 +109,7 @@ public class MapCreater : MonoBehaviour
         
         // 初始化玩家
         MyPlayer MP = FindObjectOfType<MyPlayer>();
-        MyPlayer[] g = FindObjectsOfType<MyPlayer>();
-        Debug.Log("玩家总数是:" + g.Length);
-        
+
         Box[] boxes = FindObjectsOfType<Box>();
         Debug.Log("盒子总数是:" + boxes.Length);
         MP.transform.position = new Vector3(2, -3);
@@ -138,6 +135,7 @@ public class MapCreater : MonoBehaviour
                     GameObject target1 = Instantiate(target, new Vector3(c, -r), Quaternion.identity);
                     target1.layer = layerMaps["Target"];
                     pos_target.Add(c * 100 + (-r), target1);
+                    GameObjectList.Add(target1);
                 }
             }
         }
@@ -157,13 +155,10 @@ public class MapCreater : MonoBehaviour
                     GameObject g = Instantiate(targetInBox, new Vector3(c * 30, -r), Quaternion.identity);
                     g.layer = layerMaps["TargetInBox"];
                     pos_targetBox.Add(c * 100 + (-r), g);
+                    GameObjectList.Add(g);
                 }
             }
         }
-
-        //打印walls
-        // Debug.Log("targetBox集合length：");
-        // Debug.Log(pos_targetBox.Count);
     }
 
     private void initBox(int num)
@@ -179,6 +174,7 @@ public class MapCreater : MonoBehaviour
                     GameObject box1 = Instantiate(box, new Vector3(c, -r), Quaternion.identity);
                     box1.layer = layerMaps["Box"];
                     pos_box.Add(c * 100 + (-r), box1);
+                    GameObjectList.Add(box1);
                 }
             }
         }
@@ -194,8 +190,9 @@ public class MapCreater : MonoBehaviour
                 int i = mapsArr[r, c];
                 if (i == num)
                 {
-                    Instantiate(wall, new Vector3(c, -r), Quaternion.identity);
+                    GameObject w = Instantiate(wall, new Vector3(c, -r), Quaternion.identity);
                     walls.Add(c * 100 + (-r)); // 墙不会移动，只存位置
+                    GameObjectList.Add(w);
                 }
             }
             //打印walls
@@ -218,6 +215,7 @@ public class MapCreater : MonoBehaviour
             {
                 GameObject ground1 = Instantiate(ground, new Vector3(c, -r), Quaternion.identity);
                 ground1.layer = layerMaps["Ground"];
+                GameObjectList.Add(ground1);
             }
         }
     }

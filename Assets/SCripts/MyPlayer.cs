@@ -7,6 +7,7 @@ public class MyPlayer : MonoBehaviour
 
     MapCreater M;
     Exit exit ;
+    MapDestroyImmediate mapDestroyImmediate;
     public GameObject NextBtn;
     int boxCompleted = 0;
     //bool gameOver = false;  // 游戏是否结束
@@ -170,6 +171,34 @@ public class MyPlayer : MonoBehaviour
      */
     public void creat()
     {
+        //1.需要清空上一关生成的Game Object
+        if (NextLevel.nowLevel >= 0)
+        {
+           DesGameObject();
+           print("mapDestroyImmediate.DesGameObject()...");
+           // 销毁物体方法通过，初始物体时，获取到关卡地图后，initObject时要找到mapArr数组...     日期：2020年7月30日
+        }
+        // 初始化变量
+        M.MapList = new List<int[,]>();
+        M.pos_targetBox = new Dictionary<int, GameObject>();
+        M.pos_box = new Dictionary<int, GameObject>(); 
+        M.pos_target = new Dictionary<int, GameObject>();  
+        M.layerMaps = new Dictionary<string, int>();
+        M.walls = new HashSet<int>();
+
+        // 创建地图
         M.creat();
+    }
+    
+    public void DesGameObject()
+    {
+        print("销毁方法..." + MapCreater.GameObjectList.Count);
+        List<GameObject> gameObjectList = MapCreater.GameObjectList;
+        int count = MapCreater.GameObjectList.Count;
+        for (int i = 0; i < count; i++)
+        {
+            //DestroyImmediate(gameObjectList[i]);    数组越界：删除后GameObjectList就少了一个.
+            DestroyImmediate(MapCreater.GameObjectList[0].gameObject);
+        }
     }
 }

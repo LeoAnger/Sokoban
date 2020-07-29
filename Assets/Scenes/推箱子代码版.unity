@@ -205,6 +205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 538224216}
   - component: {fileID: 538224215}
+  - component: {fileID: 538224217}
   m_Layer: 0
   m_Name: MapCreater
   m_TagString: Untagged
@@ -229,9 +230,7 @@ MonoBehaviour:
   target: {fileID: 1728221174}
   targetInBox: {fileID: 8857441308098167419}
   ground: {fileID: 1295702537}
-  player: {fileID: 169596819}
   box: {fileID: 477602435}
-  targets: 
 --- !u!4 &538224216
 Transform:
   m_ObjectHideFlags: 0
@@ -246,6 +245,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &538224217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 538224214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58a5a9f4cb0f0ad468301046e2499523, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &574137252
 GameObject:
   m_ObjectHideFlags: 0
