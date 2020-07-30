@@ -28,7 +28,7 @@ public class MyUtil
         }
         catch (Exception ex)
         {
-            //Console.WriteLine(ex.Message);
+            Console.WriteLine(ex.Message);
         }
         return null;
     }
@@ -123,6 +123,7 @@ public class MyUtil
     */
     public static T getMapByNum<T>(List<T> list, int num)
     {
+        Debug.Log(list.Count + "需要的地图num:" + num);
         return list[num];
     }
 }

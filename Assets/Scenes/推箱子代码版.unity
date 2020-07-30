@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NextBtn: {fileID: 988431752}
+  win: {fileID: 270304037}
 --- !u!1 &270304037 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6079047870150915083, guid: c128f71a8b02d1044832dc47b0515a7c,
@@ -562,7 +563,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 169596820}
-        m_MethodName: creat
+        m_MethodName: creatByBtn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1198,12 +1199,12 @@ PrefabInstance:
     - target: {fileID: 6079047870150915081, guid: c128f71a8b02d1044832dc47b0515a7c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.01
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6079047870150915081, guid: c128f71a8b02d1044832dc47b0515a7c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.52
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 6079047870150915081, guid: c128f71a8b02d1044832dc47b0515a7c,
         type: 3}
@@ -1254,6 +1255,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: YouWin
+      objectReference: {fileID: 0}
+    - target: {fileID: 6079047870150915083, guid: c128f71a8b02d1044832dc47b0515a7c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c128f71a8b02d1044832dc47b0515a7c, type: 3}

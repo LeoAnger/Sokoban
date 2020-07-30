@@ -9,6 +9,7 @@ public class MyPlayer : MonoBehaviour
     Exit exit ;
     MapDestroyImmediate mapDestroyImmediate;
     public GameObject NextBtn;
+    public GameObject win;
     int boxCompleted = 0;
     //bool gameOver = false;  // 游戏是否结束
     void Awake()
@@ -57,13 +58,13 @@ public class MyPlayer : MonoBehaviour
 
         if(isWall(nx, ny))
         {
-            Debug.Log("撞墙..." + (nx * 100 + y));
+            //Debug.Log("撞墙..." + (nx * 100 + y));
             return;
         }
 
         if(isBox(nx, ny))
         {
-            Debug.Log("Box...");
+            // Debug.Log("Box...");
             // 下一步可否移动？
             int nnx = nx + dx;
             int nny = ny + dy;
@@ -96,7 +97,7 @@ public class MyPlayer : MonoBehaviour
             }
 
 
-            Debug.Log("移动Box:x=" + nnx + ",y=" + nny);
+            // Debug.Log("移动Box:x=" + nnx + ",y=" + nny);
             M.pos_box.Remove(nx * 100 + ny);
             M.pos_box.Add(nnx * 100 + nny, G);
         }
@@ -118,11 +119,8 @@ public class MyPlayer : MonoBehaviour
         {
             Debug.Log("游戏胜利");
             // 显示胜利画面
-            Win win = FindObjectOfType<Win>();
-            win.transform.position = new Vector3(8, -5);
-            // 显示退出程序按钮
-            //exit.transform.position = new Vector3(0, 0);
-            //exit.gameObject.SetActive(true);
+            //Win win = FindObjectOfType<Win>();
+            win.gameObject.SetActive(true);
             NextBtn.SetActive(true);
             // 修改游戏胜利变量
             NextLevel.nowLevelBool = true;
@@ -161,7 +159,7 @@ public class MyPlayer : MonoBehaviour
         return false;
     }
 
-    // 下一关
+    // 下一关:按钮事件
     /**
      * 日期：2020年7月28日23点43分
      * 问题：
@@ -169,7 +167,7 @@ public class MyPlayer : MonoBehaviour
      *     2.生成的GameObject保存到List<GameObject> nowLevelGameObjectList;
      *     3.根据二维数组生成地图
      */
-    public void creat()
+    public void creatByBtn()
     {
         //1.需要清空上一关生成的Game Object
         if (NextLevel.nowLevel >= 0)
@@ -178,16 +176,27 @@ public class MyPlayer : MonoBehaviour
            print("mapDestroyImmediate.DesGameObject()...");
            // 销毁物体方法通过，初始物体时，获取到关卡地图后，initObject时要找到mapArr数组...     日期：2020年7月30日
         }
+        // 最后一关，通关后到第一关
+        if (NextLevel.nowLevel >= MapCreater.MapList.Count - 1)
+        {
+            NextLevel.nowLevel = -1;
+        }
         // 初始化变量
-        M.MapList = new List<int[,]>();
         M.pos_targetBox = new Dictionary<int, GameObject>();
         M.pos_box = new Dictionary<int, GameObject>(); 
-        M.pos_target = new Dictionary<int, GameObject>();  
-        M.layerMaps = new Dictionary<string, int>();
+        M.pos_target = new Dictionary<int, GameObject>();
         M.walls = new HashSet<int>();
 
         // 创建地图
         M.creat();
+        
+        // 隐藏胜利画面和下一关按钮
+        //win.transform.position = new Vector3(8, -5);
+        win.gameObject.SetActive(false);
+        NextBtn.SetActive(false);
+        
+        // 修改游戏胜利变量
+        NextLevel.nowLevelBool = false;
     }
     
     public void DesGameObject()
