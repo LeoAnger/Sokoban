@@ -87,6 +87,7 @@ public class MapCreater : MonoBehaviour
                 {
                     GameObject target1 = Instantiate(target, new Vector3(c, -r), Quaternion.identity);
                     target1.layer = layerMaps["Target"];
+                    //target1.GetComponent<Renderer>().sortingOrder = 1;
                     pos_target.Add(c * 100 + (-r), target1);
                     GameObjectList.Add(target1);
                 }
@@ -107,6 +108,8 @@ public class MapCreater : MonoBehaviour
                 {
                     GameObject g = Instantiate(targetInBox, new Vector3(c * 30, -r), Quaternion.identity);
                     g.layer = layerMaps["TargetInBox"];
+                    //g.GetComponent<Renderer>().sortingOrder = 1;
+                    //g.GetComponent<SpriteRenderer>().sortingOrder = 1;
                     pos_targetBox.Add(c * 100 + (-r), g);
                     GameObjectList.Add(g);
                 }

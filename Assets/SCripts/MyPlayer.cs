@@ -94,6 +94,8 @@ public class MyPlayer : MonoBehaviour
                 tBox.transform.position = new Vector3(nnx, nny);
                 // 3.更新boxCompleted
                 boxCompleted++;
+                Debug.Log("箱子位于目标：" + G.transform.position);
+                Debug.Log("target箱子位置：" + tBox.transform.position);
             }
 
 
@@ -121,9 +123,12 @@ public class MyPlayer : MonoBehaviour
             // 显示胜利画面
             //Win win = FindObjectOfType<Win>();
             win.gameObject.SetActive(true);
+            Debug.Log("显示胜利画面...");
             NextBtn.SetActive(true);
             // 修改游戏胜利变量
             NextLevel.nowLevelBool = true;
+            // 初始化盒子完成数量
+            boxCompleted = 0;
         }
 
     }
@@ -155,7 +160,7 @@ public class MyPlayer : MonoBehaviour
 
     bool isWin()
     {
-        if (boxCompleted >= M.boxNums) return true;
+        if (!NextLevel.nowLevelBool && boxCompleted >= M.boxNums) return true;
         return false;
     }
 
@@ -187,27 +192,76 @@ public class MyPlayer : MonoBehaviour
         M.pos_target = new Dictionary<int, GameObject>();
         M.walls = new HashSet<int>();
 
-        // 创建地图
-        M.creat();
+        // 游戏清空数据及预置物体的sorting layer设置——————2020年8月1日07点24分
+        // 修改游戏胜利变量
+        NextLevel.nowLevelBool = false;
         
         // 隐藏胜利画面和下一关按钮
         //win.transform.position = new Vector3(8, -5);
-        win.gameObject.SetActive(false);
+        win.SetActive(false);
+        Debug.Log("隐藏胜利画面》。。");
         NextBtn.SetActive(false);
         
-        // 修改游戏胜利变量
-        NextLevel.nowLevelBool = false;
+        // 创建地图
+        M.creat();
+        
     }
     
     public void DesGameObject()
     {
         print("销毁方法..." + MapCreater.GameObjectList.Count);
-        List<GameObject> gameObjectList = MapCreater.GameObjectList;
         int count = MapCreater.GameObjectList.Count;
         for (int i = 0; i < count; i++)
         {
             //DestroyImmediate(gameObjectList[i]);    数组越界：删除后GameObjectList就少了一个.
-            DestroyImmediate(MapCreater.GameObjectList[0].gameObject);
+            Destroy(MapCreater.GameObjectList[i]);
+            /*    引用
+             *  Unity 常用脚本：销毁物体
+
+                JPF29 2018-11-18 20:22:08  3128  收藏 1
+                分类专栏： Unity
+                版权
+                方法一：GameObject.Destroy(游戏物体（gameObject类型）);
+
+                方法二：GameObject.DestroyImmediate(游戏物体（gameObject类型）);
+
+                方法三：GameObject.DestroyObject(游戏物体（gameObject类型）);
+
+                方法在脚本继承MonoBehaviour时可直接使用，无需通过GameObject调用。
+
+                DestroyImmediate立即销毁目标，并将目标置为null,且将目标的所有上层引用置空。
+                Destroy则在本帧结束前，渲染之前销毁目标和上层引用。不会立即销毁，Destroy调用后，目标数据仍然存在，不为null，上层引用也正常。注意：在同一帧，会出现前面代码已经用Destroy销毁了某物体，但后面仍然能够获取到的情况。就是因为Destroy在下一帧才会完成销毁操作。如果立即销毁，则使用DestroyImmediate。
+                推荐使用Destroy代替DestroyImmediate，原因是DestroyImmediate是立即销毁，立即释放资源，做这个操作的时候，会消耗很多时间，影响主线程运行。Destroy是异步销毁，一般在下一帧销毁，不会影响主线程的运行。
+             */
+        }
+    }
+    
+    public void DesGameObject1()
+    {
+        print("销毁方法..." + MapCreater.GameObjectList.Count);
+        int count = MapCreater.GameObjectList.Count;
+        for (int i = 0; i < count; i++)
+        {
+            //DestroyImmediate(gameObjectList[i]);    数组越界：删除后GameObjectList就少了一个.
+            Destroy(MapCreater.GameObjectList[i]);
+            /*    引用
+             *  Unity 常用脚本：销毁物体
+
+                JPF29 2018-11-18 20:22:08  3128  收藏 1
+                分类专栏： Unity
+                版权
+                方法一：GameObject.Destroy(游戏物体（gameObject类型）);
+
+                方法二：GameObject.DestroyImmediate(游戏物体（gameObject类型）);
+
+                方法三：GameObject.DestroyObject(游戏物体（gameObject类型）);
+
+                方法在脚本继承MonoBehaviour时可直接使用，无需通过GameObject调用。
+
+                DestroyImmediate立即销毁目标，并将目标置为null,且将目标的所有上层引用置空。
+                Destroy则在本帧结束前，渲染之前销毁目标和上层引用。不会立即销毁，Destroy调用后，目标数据仍然存在，不为null，上层引用也正常。注意：在同一帧，会出现前面代码已经用Destroy销毁了某物体，但后面仍然能够获取到的情况。就是因为Destroy在下一帧才会完成销毁操作。如果立即销毁，则使用DestroyImmediate。
+                推荐使用Destroy代替DestroyImmediate，原因是DestroyImmediate是立即销毁，立即释放资源，做这个操作的时候，会消耗很多时间，影响主线程运行。Destroy是异步销毁，一般在下一帧销毁，不会影响主线程的运行。
+             */
         }
     }
 }
