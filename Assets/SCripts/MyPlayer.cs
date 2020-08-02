@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MyPlayer : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class MyPlayer : MonoBehaviour
     MapDestroyImmediate mapDestroyImmediate;
     public GameObject NextBtn;
     public GameObject win;
+    public GameObject text;    // 测试文本
     int boxCompleted = 0;
     //bool gameOver = false;  // 游戏是否结束
     void Awake()
@@ -96,6 +98,9 @@ public class MyPlayer : MonoBehaviour
                 boxCompleted++;
                 Debug.Log("箱子位于目标：" + G.transform.position);
                 Debug.Log("target箱子位置：" + tBox.transform.position);
+                text.GetComponent<Text>().text = "当前完成：" + boxCompleted +
+                    "/n胜利：" + NextLevel.nowLevelBool + 
+                    "/n盒子总数：" + M.boxNums;
             }
 
 
@@ -191,6 +196,7 @@ public class MyPlayer : MonoBehaviour
         M.pos_box = new Dictionary<int, GameObject>(); 
         M.pos_target = new Dictionary<int, GameObject>();
         M.walls = new HashSet<int>();
+        M.boxNums = 0;
 
         // 游戏清空数据及预置物体的sorting layer设置——————2020年8月1日07点24分
         // 修改游戏胜利变量

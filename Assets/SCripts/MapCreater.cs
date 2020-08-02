@@ -43,9 +43,6 @@ public class MapCreater : MonoBehaviour
 
     public void creat()
     {
-        // 判断当前关卡是否胜利
-        if (!NextLevel.nowLevelBool)
-        { return; }
         // 下一关
         NextLevel.nowLevel++;
         // 1.获取地图
@@ -67,9 +64,6 @@ public class MapCreater : MonoBehaviour
         Debug.Log("盒子总数是:" + boxes.Length);
         MP.transform.position = new Vector3(2, -3);
 
-        /// 初始化盒子总数
-        boxNums = FindObjectsOfType<Box>().Length - 1;
-        
         // 更新胜利变量
         NextLevel.nowLevelBool = false;
         print("当前地图：" + NextLevel.nowLevel);
@@ -90,6 +84,7 @@ public class MapCreater : MonoBehaviour
                     //target1.GetComponent<Renderer>().sortingOrder = 1;
                     pos_target.Add(c * 100 + (-r), target1);
                     GameObjectList.Add(target1);
+                    boxNums++;
                 }
             }
         }
