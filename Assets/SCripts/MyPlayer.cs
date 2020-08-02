@@ -12,7 +12,7 @@ public class MyPlayer : MonoBehaviour
     public GameObject NextBtn;
     public GameObject win;
     public GameObject text;    // 测试文本
-    int boxCompleted = 0;
+    public static int boxCompleted = 0;
     //bool gameOver = false;  // 游戏是否结束
     void Awake()
     {
@@ -60,14 +60,13 @@ public class MyPlayer : MonoBehaviour
 
         if(isWall(nx, ny))
         {
-            //Debug.Log("撞墙..." + (nx * 100 + y));
             return;
         }
 
+        // 下一步是盒子
         if(isBox(nx, ny))
         {
-            // Debug.Log("Box...");
-            // 下一步可否移动？
+            // 盒子的下一步可否移动？
             int nnx = nx + dx;
             int nny = ny + dy;
             if (isWall(nnx, nny) || isBox(nnx, nny)) return;
@@ -76,35 +75,33 @@ public class MyPlayer : MonoBehaviour
             GameObject G = getBox(nx, ny);
             G.transform.position = new Vector3(nnx, nny);
 
-            // 如果盒子走出目标, 改变盒子状态
+            // 如果盒子走出目标, 隐藏盒子状态
             if (isTarget(nx, ny))
             {
                 // 1.获取对应的盒子
                 GameObject tBox = getTargetBox(nx, ny);
                 // 2.改变盒子的位置
-                tBox.transform.position = new Vector3(30, nny);
+                tBox.SetActive(false);
                 // 3.更新boxCompleted
                 boxCompleted--;
             }
 
-            // 如果盒子位于目标, 改变盒子状态
+            // 如果盒子位于目标, 显示盒子状态
             if (isTarget(nnx, nny))
             {
                 // 1.获取对应的盒子
                 GameObject tBox = getTargetBox(nnx, nny);
                 // 2.改变盒子的位置
-                tBox.transform.position = new Vector3(nnx, nny);
+                tBox.SetActive(true);
                 // 3.更新boxCompleted
                 boxCompleted++;
                 Debug.Log("箱子位于目标：" + G.transform.position);
                 Debug.Log("target箱子位置：" + tBox.transform.position);
                 text.GetComponent<Text>().text = "当前完成：" + boxCompleted +
-                    "/n胜利：" + NextLevel.nowLevelBool + 
-                    "/n盒子总数：" + M.boxNums;
+                    "\n胜利：" + NextLevel.nowLevelBool + 
+                    "\n盒子总数：" + M.boxNums;
             }
-
-
-            // Debug.Log("移动Box:x=" + nnx + ",y=" + nny);
+            // 盒子坐标
             M.pos_box.Remove(nx * 100 + ny);
             M.pos_box.Add(nnx * 100 + nny, G);
         }
@@ -160,6 +157,7 @@ public class MyPlayer : MonoBehaviour
 
     GameObject getTargetBox(int x, int y)
     {
+        text.GetComponent<Text>().text = "目标箱子：" + M.pos_targetBox.Count + "\n 开始获取...";
         return M.pos_targetBox[x * 100 + y];
     }
 

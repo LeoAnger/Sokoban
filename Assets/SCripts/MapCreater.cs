@@ -17,6 +17,7 @@ public class MapCreater : MonoBehaviour
     public GameObject targetInBox;
     public GameObject ground;
     public GameObject box;
+    public GameObject player;
 
 
     public Dictionary<int, GameObject> pos_targetBox = new Dictionary<int, GameObject>();   // 目标盒子
@@ -53,23 +54,20 @@ public class MapCreater : MonoBehaviour
         // 生成Ground
         initGround();
         initWall(1);
-        initTarget(2);
-        initBox(3);
-        initTargetInBox(2);
+        initTarget(2, 4);
+        initBox(3, 4);
+        initTargetBox(2, 4);
+        initPlayer(9);
         
-        // 初始化玩家
-        MyPlayer MP = FindObjectOfType<MyPlayer>();
-
         Box[] boxes = FindObjectsOfType<Box>();
         Debug.Log("盒子总数是:" + boxes.Length);
-        MP.transform.position = new Vector3(2, -3);
 
         // 更新胜利变量
         NextLevel.nowLevelBool = false;
         print("当前地图：" + NextLevel.nowLevel);
     }
 
-    private void initTarget(int num)
+    private void initPlayer(int num)
     {
         for (int r = 0; r < rows; r++)
         {   // 行：r
@@ -78,6 +76,23 @@ public class MapCreater : MonoBehaviour
                 int i = mapsArr[r, c];
 
                 if (i == num)
+                {
+                    player.transform.position = new Vector3(c, -r);
+                    Debug.Log("玩家位置：" + player.transform.position);
+                }
+            }
+        }
+    }
+
+    private void initTarget(int num, int targetAndBox)
+    {
+        for (int r = 0; r < rows; r++)
+        {   // 行：r
+            for (int c = 0; c < column; c++)
+            {
+                int i = mapsArr[r, c];
+
+                if (i == num || i == targetAndBox)
                 {
                     GameObject target1 = Instantiate(target, new Vector3(c, -r), Quaternion.identity);
                     target1.layer = layerMaps["Target"];
@@ -90,29 +105,44 @@ public class MapCreater : MonoBehaviour
         }
     }
 
-    private void initTargetInBox(int num)
+    private void initTargetBox(int num, int targetAndBox)
     {
         for (int r = 0; r < rows; r++)
         {   // 行：r
             for (int c = 0; c < column; c++)
             {
-                //Console.Write(intArr[r, c] + ",");
                 int i = mapsArr[r, c];
-
                 if (i == num)
                 {
-                    GameObject g = Instantiate(targetInBox, new Vector3(c * 30, -r), Quaternion.identity);
+                    // GameObject g = Instantiate(targetInBox, new Vector3(c * 30, -r), Quaternion.identity);
+                    GameObject g = Instantiate(targetInBox, new Vector3(c, -r), Quaternion.identity);
                     g.layer = layerMaps["TargetInBox"];
-                    //g.GetComponent<Renderer>().sortingOrder = 1;
-                    //g.GetComponent<SpriteRenderer>().sortingOrder = 1;
+                    // 隐藏目标盒子
+                    g.SetActive(false);
                     pos_targetBox.Add(c * 100 + (-r), g);
                     GameObjectList.Add(g);
                 }
             }
         }
+        
+        for (int r = 0; r < rows; r++)
+        {   // 行：r
+            for (int c = 0; c < column; c++)
+            {
+                int i = mapsArr[r, c];
+                if (i == targetAndBox)
+                {
+                    GameObject g = Instantiate(targetInBox, new Vector3(c, -r), Quaternion.identity);
+                    g.layer = layerMaps["TargetInBox"];
+                    pos_targetBox.Add(c * 100 + (-r), g);
+                    GameObjectList.Add(g);
+                    MyPlayer.boxCompleted++;
+                }
+            }
+        }
     }
 
-    private void initBox(int num)
+    private void initBox(int num, int targetAndBox)
     {
         for (int r = 0; r < rows; r++)
         {   // 行：r
@@ -120,7 +150,7 @@ public class MapCreater : MonoBehaviour
             {
                 int i = mapsArr[r, c];
 
-                if (i == num)
+                if (i == num || i == targetAndBox)
                 {
                     GameObject box1 = Instantiate(box, new Vector3(c, -r), Quaternion.identity);
                     box1.layer = layerMaps["Box"];

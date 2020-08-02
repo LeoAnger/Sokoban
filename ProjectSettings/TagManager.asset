@@ -42,3 +42,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 16229851
+    locked: 0
+  - name: Wall
+    uniqueID: 4204354569
+    locked: 0
+  - name: Target
+    uniqueID: 1304964257
+    locked: 0
+  - name: Box
+    uniqueID: 195112217
+    locked: 0
+  - name: Player
+    uniqueID: 1334691019
+    locked: 0
+  - name: TargetInBox
+    uniqueID: 3851877759
+    locked: 0
+  - name: Victory
+    uniqueID: 1920574699
+    locked: 0
