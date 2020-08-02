@@ -12,6 +12,7 @@ public class MyPlayer : MonoBehaviour
     public GameObject NextBtn;
     public GameObject win;
     public GameObject text;    // 测试文本
+    public AudioSource moveSound;
     public static int boxCompleted = 0;
     //bool gameOver = false;  // 游戏是否结束
     void Awake()
@@ -51,6 +52,25 @@ public class MyPlayer : MonoBehaviour
             dy--;
         }
 
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            Debug.Log("重新开始当前关卡。");
+            // 修改游戏胜利变量
+            NextLevel.nowLevelBool = true;
+            // 初始化盒子完成数量
+            boxCompleted = 0;
+            // 回退当前关卡
+            NextLevel.nowLevel--;
+            // 如果是第一关，需要手动清空
+            if (NextLevel.nowLevel == -1)
+            {
+                DesGameObject();
+                print("第一关，手动清空。。。");
+            }
+            creatByBtn();
+            
+        }
+
         int x = (int)transform.position.x;
         int y = (int)transform.position.y;
 
@@ -71,6 +91,11 @@ public class MyPlayer : MonoBehaviour
             int nny = ny + dy;
             if (isWall(nnx, nny) || isBox(nnx, nny)) return;
 
+            // 播放移动声音
+            moveSound.enabled = true;
+            Debug.Log("播放移动声音");
+            moveSound.Play();
+            
             // 可以移动
             GameObject G = getBox(nx, ny);
             G.transform.position = new Vector3(nnx, nny);
@@ -105,7 +130,8 @@ public class MyPlayer : MonoBehaviour
             M.pos_box.Remove(nx * 100 + ny);
             M.pos_box.Add(nnx * 100 + nny, G);
         }
-
+        
+        
         transform.position = new Vector3(nx,ny);
         if(NextLevel.nowLevelBool)
         {
